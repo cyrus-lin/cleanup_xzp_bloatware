@@ -19,16 +19,20 @@ fun main(args: Array<String>) {
         .distinct()
         .sorted()
 
-    uninstallPackages(PKG_FOUND_BY_ME.asList() + fromXda)
+    (fromXda + PKG_FOUND_BY_ME - DISABLE_INSTEAD_OF_UNINSTALL).forEach { uninstallPackage(it) }
+    DISABLE_INSTEAD_OF_UNINSTALL.forEach { disablePackage(it) }
 }
 
-private fun uninstallPackages(packages: List<String>) {
-    packages.forEach { uninstallPkg(it) }
+private fun uninstallPackage(pkg: String) {
+    executeCmd("adb uninstall --user 0 $pkg")
 }
 
-private fun uninstallPkg(pkg: String) {
+private fun disablePackage(pkg: String) {
+    executeCmd("adb shell pm disable-user $pkg")
+}
+
+private fun executeCmd(cmd: String) {
     try {
-        val cmd = "adb uninstall --user 0 $pkg"
         println(cmd)
         val process = ProcessBuilder(cmd.split("\\s".toRegex()))
             .redirectOutput(ProcessBuilder.Redirect.PIPE)
@@ -41,10 +45,15 @@ private fun uninstallPkg(pkg: String) {
     }
 }
 
+private val DISABLE_INSTEAD_OF_UNINSTALL = listOf(
+    "com.google.android.gms",
+    "com.google.android.gms.persistent",
+)
+
 /**
  * 我自己找到的可以卸载的 app
  */
-private val PKG_FOUND_BY_ME = arrayOf(
+private val PKG_FOUND_BY_ME = listOf(
     "com.scee.psxandroid",
     "com.sony.nfx.app.sfrc",
     "com.sonymobile.lifelog",
@@ -99,8 +108,12 @@ private val PKG_FOUND_BY_ME = arrayOf(
     "com.android.vending",
     "com.google.android.backuptransport",
     "com.google.android.gms.policy_sidecar_aps",
-    "com.google.android.gms",
-    "com.google.android.gsf"
+    "com.google.android.gsf",
+    "com.google.android.apps.turbo",
+    "com.google.android.apps.work.oobconfig",
+    "com.google.android.partnersetup",
+    "com.google.android.setupwizard",
+    "com.sony.tvsideview.videoph"
 )
 
 /**
@@ -226,7 +239,6 @@ SoundPhotoCamera-xxhdpi-release                   # sound capture addon for sony
 sound-picker-release                              # ringtone picker (safe: not broken sound set)
 StartupFlagV2                                     # ??? _ but safe to remove 
 TagGoogle                                         # google tags
-UpdateCenter-release                              # Not need it in rooted device
 usb-mtp-backup-transport                          # can’t backup/restore over mtp
 usb-mtp-factoryreset-wrapper                      # can’t backup/restore over mtp
 usb-mtp-fotaupdate-wrapper                        # can’t backup/restore over mtp
