@@ -45,6 +45,9 @@ private fun executeCmd(cmd: String) {
     }
 }
 
+/**
+ * 无法卸载，或者说最好不要卸载，而是改为禁用的 app
+ */
 private val DISABLE_INSTEAD_OF_UNINSTALL = listOf(
     "com.google.android.gms",
     "com.google.android.gms.persistent",
@@ -113,7 +116,17 @@ private val PKG_FOUND_BY_ME = listOf(
     "com.google.android.apps.work.oobconfig",
     "com.google.android.partnersetup",
     "com.google.android.setupwizard",
-    "com.sony.tvsideview.videoph"
+    "com.sony.tvsideview.videoph",
+    "com.android.contacts",
+    "com.android.dialer",
+    "com.sonymobile.simplehome",
+    "com.nttdocomo.android.bugreport",
+    "com.nttdocomo.android.docomoset",
+    "com.nttdocomo.android.pf.dcmippushaggregator",
+    "com.nttdocomo.android.atf",
+    "com.nttdocomo.android.areamail",
+    "com.sonyericsson.docomo.settings",
+    "com.facebook.appmanager"
 )
 
 /**
